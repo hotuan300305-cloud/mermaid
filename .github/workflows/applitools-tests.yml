@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 env:
-  # on PRsfrom forks, this secret will always be empty, for security reasons
+  # on PRs from forks, this secret will always be empty, for security reasons
   USE_APPLI: ${{ secrets.APPLITOOLS_API_KEY && 'true' || '' }}
 
 jobs:
