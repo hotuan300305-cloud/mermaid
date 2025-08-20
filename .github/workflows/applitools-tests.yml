@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node-22.18.0-chrome-139.0.7258.127-1-ff-141.0.3-edge-139.0.3405.86-1
-      options: --user 1001
+      options: --user 1001 --network host
 
     steps:
       - if: ${{ ! env.USE_APPLI }}
@@ -81,8 +81,9 @@ jobs:
         uses: cypress-io/github-action@18a6541367f4580a515371905f499a27a44e8dbe # v6.7.12
         with:
           start: pnpm run dev
-          wait-on: 'http://localhost:9000'
+          wait-on: 'http://0.0.0.0:9000'
           browser: chrome
+          spec: 'cypress/integration/rendering/zenuml.spec.js'
         env:
           # Mermaid applitools.config.js uses this to pick batch name
           APPLI_BRANCH: ${{ github.ref_name }}
@@ -92,3 +93,6 @@ jobs:
           APPLITOOLS_PARENT_BRANCH: ${{ github.event.inputs.parent_branch || 'master' }}
           APPLITOOLS_API_KEY: ${{ secrets.APPLITOOLS_API_KEY }}
           APPLITOOLS_SERVER_URL: 'https://eyesapi.applitools.com'
+          # Ensure server binds to all interfaces
+          HOST: '0.0.0.0'
+          PORT: '9000'
