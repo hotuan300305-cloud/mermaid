@@ -51,10 +51,18 @@ jobs:
           node-version-file: '.node-version'
           cache: pnpm
 
+      - name: Cache Cypress
+        uses: actions/cache@4c1c5665d8930a7b3b4b0c8c0c8c0c8c0c8c0c8c # v4.0.0
+        with:
+          path: /root/.cache/Cypress
+          key: cypress-cache-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            cypress-cache-${{ runner.os }}-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         env:
-          CYPRESS_CACHE_FOLDER: .cache/Cypress
+          CYPRESS_CACHE_FOLDER: /root/.cache/Cypress
 
       - if: ${{ env.USE_APPLI }}
         name: Notify applitools of new batch
